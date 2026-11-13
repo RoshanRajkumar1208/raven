@@ -1,0 +1,81 @@
+{
+  "info": {
+    "_postman_id": "8d6f6c2e-7a39-4c4e-9b9f-raven-demo-0001",
+    "name": "RAVEN Demo Shop API (Postman)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{"key": "token", "value": "{{token}}", "type": "string"}]
+  },
+  "variable": [
+    {"key": "baseUrl", "value": "http://127.0.0.1:8088/api/v1"}
+  ],
+  "item": [
+    {
+      "name": "Public",
+      "auth": {"type": "noauth"},
+      "item": [
+        {"name": "Health", "request": {"method": "GET", "url": "{{baseUrl}}/health"}},
+        {
+          "name": "Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/products?category=books&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [{"key": "category", "value": "books"}, {"key": "limit", "value": "10"}]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"demo\",\n  \"password\": \"demo-password\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": "{{baseUrl}}/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {"name": "List users", "request": {"method": "GET", "url": "{{baseUrl}}/users"}},
+        {
+          "name": "Get user",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [{"key": "id", "value": "1"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {"name": "List orders", "request": {"method": "GET", "url": "{{baseUrl}}/orders"}},
+        {
+          "name": "Create order",
+          "request": {
+            "method": "POST",
+            "body": {"mode": "raw", "raw": "{\"product_id\": 7, \"quantity\": 1}", "options": {"raw": {"language": "json"}}},
+            "url": "{{baseUrl}}/orders"
+          }
+        }
+      ]
+    },
+    {"name": "Daily report", "request": {"method": "GET", "url": "{{baseUrl}}/reports/daily"}}
+  ]
+}

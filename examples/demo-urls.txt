@@ -1,0 +1,7 @@
+# RAVEN URL list: one request per line, "METHOD URL" or just "URL" (GET).
+# Lines starting with # are ignored.
+http://127.0.0.1:8088/api/v1/health
+GET http://127.0.0.1:8088/api/v1/products?category=books&limit=10
+GET http://127.0.0.1:8088/api/v1/users
+GET http://127.0.0.1:8088/api/v1/users/1
+GET http://127.0.0.1:8088/api/v1/orders

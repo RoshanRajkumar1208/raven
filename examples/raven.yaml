@@ -1,0 +1,14 @@
+# RAVEN config file: any `raven scan` option, written once.
+# Run with:  raven scan --config examples/raven.yaml
+# Options typed on the command line override the values here.
+
+source: http://127.0.0.1:8088/openapi.yaml
+auth-bearer: demo-token
+format: [html, json, sarif, md]
+output: raven-report
+fail-on: high
+delay: 50                   # milliseconds between requests
+header:
+  X-Scan-Owner: appsec-team
+exclude:
+  - /health

@@ -1,0 +1,12 @@
+# Values RAVEN should use for parameters (pass with --values examples/values.yaml).
+# Without this file RAVEN uses examples from the API description, or generates
+# realistic values from the declared types.
+#
+#   name: value           applies to every parameter called "name"
+#   query.name: value     only to query parameters called "name"
+#   path.name: value      only to path parameters called "name"
+#   header.name: value    only to header parameters called "name"
+
+id: 2
+query.category: games
+query.limit: 5

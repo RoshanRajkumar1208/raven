@@ -1,0 +1,17 @@
+# Token file: RAVEN logs in by itself and refreshes the token during long scans.
+# Use it with:  raven scan api.yaml --token-file examples/token-file.yaml
+#
+# Never write real secrets here. ${NAME} is read from environment variables:
+#   export CLIENT_ID=...   export CLIENT_SECRET=...      (Windows: set CLIENT_ID=...)
+
+url: https://auth.example.com/oauth/token
+method: POST
+data:                       # form body; use `json:` instead for a JSON body
+  grant_type: client_credentials
+  client_id: ${CLIENT_ID}
+  client_secret: ${CLIENT_SECRET}
+  scope: api.read
+token_field: access_token   # where the token is in the JSON reply (dots allowed, e.g. data.token)
+header: Authorization       # header to put it in
+prefix: "Bearer "           # text before the token
+refresh_seconds: 3000       # log in again after this many seconds

@@ -1,0 +1,47 @@
+# Use RAVEN in your own pipeline.
+# Copy this file to .github/workflows/raven.yml in YOUR API's repository.
+# It scans a staging deployment and shows the findings in the repository's
+# Security > Code scanning tab (SARIF).
+
+name: API security check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"   # every Monday 03:17 UTC
+
+permissions:
+  contents: read
+  security-events: write   # needed to upload SARIF
+
+jobs:
+  raven:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install git+https://github.com/RoshanRajkumar1208/raven.git
+      - name: Scan staging
+        env:
+          API_TOKEN: ${{ secrets.STAGING_API_TOKEN }}   # add this in Settings > Secrets
+        run: |
+          raven scan openapi.yaml \
+            --target https://staging.example.com \
+            --auth-bearer "$API_TOKEN" \
+            --format sarif,html,md \
+            --fail-on high \
+            -o raven-report --no-color
+      - name: Job summary
+        if: always()
+        run: cat raven-report/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: raven-report/findings.sarif
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: raven-report
+          path: raven-report/

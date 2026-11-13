@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: RAVEN Demo Shop API
+  version: 1.0.0
+  description: >
+    A small, deliberately misconfigured API that ships with RAVEN so you can try the
+    scanner safely. Start it with `raven demo`. Never deploy it anywhere.
+servers:
+  - url: http://127.0.0.1:8088/api/v1
+security:
+  - bearerAuth: []
+paths:
+  /health:
+    get:
+      summary: Health check (configured correctly)
+      security: []
+      responses:
+        "200": {description: OK}
+  /products:
+    get:
+      summary: List products (validates its input correctly)
+      security: []
+      parameters:
+        - name: category
+          in: query
+          schema: {type: string, enum: [books, games, music]}
+          example: books
+        - name: limit
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100}
+          example: 10
+      responses:
+        "200": {description: Product list}
+        "400": {description: Invalid input}
+  /users:
+    get:
+      summary: List users (requires a token, but does not check it)
+      responses:
+        "200": {description: User list}
+        "401": {description: Not logged in}
+  /users/{id}:
+    get:
+      summary: Get one user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer, minimum: 1, maximum: 10000}
+          example: 1
+      responses:
+        "200": {description: The user}
+        "404": {description: Not found}
+  /orders:
+    get:
+      summary: List orders (authentication enforced correctly)
+      responses:
+        "200": {description: Order list}
+        "401": {description: Not logged in}
+    post:
+      summary: Create an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [product_id, quantity]
+              properties:
+                product_id: {type: integer, minimum: 1}
+                quantity: {type: integer, minimum: 1, maximum: 20}
+            example: {product_id: 7, quantity: 1}
+      responses:
+        "201": {description: Created}
+        "400": {description: Invalid input}
+  /login:
+    post:
+      summary: Log in
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: {type: string, maxLength: 50}
+                password: {type: string, format: password}
+            example: {username: demo, password: demo-password}
+      responses:
+        "200": {description: Logged in}
+        "401": {description: Wrong credentials}
+  /reports/daily:
+    get:
+      summary: Daily report (slow)
+      responses:
+        "200": {description: Report}
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

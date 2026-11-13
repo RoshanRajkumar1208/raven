@@ -1,0 +1,101 @@
+FORMAT: 1A
+HOST: http://127.0.0.1:8088/api/v1
+
+# RAVEN Demo Shop API (API Blueprint)
+
+A small practice API that ships with RAVEN. Start it with `raven demo`.
+
+## Health [/health]
+
+### Health check [GET]
+
++ Response 200 (application/json)
+
+        {"status": "ok"}
+
+## Products [/products{?category,limit}]
+
++ Parameters
+    + category: books (string, optional) - Product category
+    + limit: 10 (number, optional) - How many products to return
+
+### List products [GET]
+
++ Response 200 (application/json)
++ Response 400 (application/json)
+
+## Users [/users]
+
+### List users [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer demo-token
+
++ Response 200 (application/json)
+
+## User [/users/{id}]
+
++ Parameters
+    + id: 1 (number, required) - The user ID
+
+### Get one user [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer demo-token
+
++ Response 200 (application/json)
++ Response 404 (application/json)
+
+## Orders [/orders]
+
+### List orders [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer demo-token
+
++ Response 200 (application/json)
+
+### Create an order [POST]
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer demo-token
+
+    + Body
+
+            {"product_id": 7, "quantity": 1}
+
++ Response 201 (application/json)
+
+## Login [/login]
+
+### Log in [POST]
+
++ Request (application/json)
+
+        {"username": "demo", "password": "demo-password"}
+
++ Response 200 (application/json)
+
+## Daily report [/reports/daily]
+
+### Get the daily report [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer demo-token
+
++ Response 200 (application/json)
